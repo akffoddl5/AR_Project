@@ -3,8 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.Scripting;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
+
 
 //indicator °ü¸®
 public class LocationManager : MonoBehaviour
@@ -20,6 +22,10 @@ public class LocationManager : MonoBehaviour
     {
         indicator.SetActive(false);
         raycastManager = GetComponent<ARRaycastManager>();
+
+        Screen.sleepTimeout = SleepTimeout.NeverSleep;
+
+        
     }
 
     void Update()
