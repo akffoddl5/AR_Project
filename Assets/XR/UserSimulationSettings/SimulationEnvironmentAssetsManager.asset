@@ -12,10 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 378fb4eec0f59ac4c95c0d5b227aa85e, type: 3}
   m_Name: SimulationEnvironmentAssetsManager
   m_EditorClassIdentifier: 
-<<<<<<< HEAD
-  m_EnvironmentPrefabPaths: []
-=======
   m_EnvironmentPrefabPaths:
   - Packages/com.unity.xr.arfoundation/Assets/Prefabs/DefaultSimulationEnvironment.prefab
->>>>>>> 34e9285abe01b4d82798bf1f4682cc5efd416607
   m_FallbackAtEndOfList: 0
