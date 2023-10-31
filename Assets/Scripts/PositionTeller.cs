@@ -47,7 +47,7 @@ public class PositionTeller : MonoBehaviour
 
 	IEnumerator Start2()
 	{
-		// 유저가 GPS 사용중인지 최초 체크
+		// 유저가 GPS 사용중인지 최초 체크//
 		if (!Input.location.isEnabledByUser)
 		{
 			Debug.Log("GPS is not enabled");

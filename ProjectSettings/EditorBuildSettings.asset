@@ -4,12 +4,5 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes:
-  - enabled: 1
-    path: Assets/Scenes/PlaneDetection.unity
-    guid: 9fc0d4010bbf28b4594072e72b8655ab
-  m_configObjects:
-    UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: 60d4fe9e594b9e64895967a2b5ece4f1, type: 2}
-    com.unity.xr.arfoundation.simulation_settings: {fileID: 11400000, guid: 8e42e580e5552d94fb47d63ebfd530f7, type: 2}
-    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: ead477f9b40f5154a83352e53e956f0f, type: 2}
-    com.unity.xr.openxr.settings4: {fileID: 11400000, guid: be13cd735783ae744b5a4f93aae241bb, type: 2}
+  m_Scenes: []
+  m_configObjects: {}
