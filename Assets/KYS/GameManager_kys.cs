@@ -17,7 +17,7 @@ public class GameManager_kys : MonoBehaviour
 			DontDestroyOnLoad(gameObject);
 
 			Screen.sleepTimeout = SleepTimeout.NeverSleep;
-			Screen.orientation = ScreenOrientation.LandscapeRight;
+			Screen.orientation = ScreenOrientation.Portrait;
 			SetResolution();
 		}
 		else
@@ -38,8 +38,8 @@ public class GameManager_kys : MonoBehaviour
 
 	public void SetResolution()
 	{
-		int setWidth = 1920; // 사용자 설정 너비
-		int setHeight = 1080; // 사용자 설정 높이
+		int setHeight = 1920; // 사용자 설정 너비
+		int setWidth = 1080; // 사용자 설정 높이
 
 		deviceWidth = Screen.width; // 기기 너비 저장
 		deviceHeight = Screen.height; // 기기 높이 저장

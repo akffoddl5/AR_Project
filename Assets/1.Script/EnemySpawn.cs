@@ -20,6 +20,7 @@ public class EnemySpawn : MonoBehaviour
 
     void Start()
     {
+        
         StartCoroutine(Spawn());
     }
 
