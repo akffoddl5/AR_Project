@@ -25,6 +25,11 @@ public class UIManager_kys : MonoBehaviour
 		yield break;
 	}
 
+	public void SwipChracter()
+	{
+		GameObject.FindWithTag("Player").GetComponent<Animator>().Play("Jump");
+	}
+
 	public void GameStart()
     {
 		//Start UI 집어 넣고
