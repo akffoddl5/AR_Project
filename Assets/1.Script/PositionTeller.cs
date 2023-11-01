@@ -25,7 +25,7 @@ public class PositionTeller : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
     {
-		StartCoroutine(Start2());
+		//StartCoroutine(Start2());
     }
 
 	private void OnTriggerEnter(Collider other)
@@ -41,9 +41,14 @@ public class PositionTeller : MonoBehaviour
 	// Update is called once per frame
 	void Update()
     {
-        log.text = transform.position.ToString() + " " + GetComponent<XROrigin>().transform.position.ToString() + " " + Camera.main.transform.position + " " ;
-        
-    }
+        //log.text = transform.position.ToString() + " " + GetComponent<XROrigin>().transform.position.ToString() + " " + Camera.main.transform.position + " " ;
+		//Camera.main.transform.parent.rotation = Camera.main.transform.rotation;
+		//Camera.main.transform.parent.rotation = Quaternion.identity;
+
+		//Camera.main.transform.parent.position = Camera.main.transform.position;
+		//Camera.main.transform.localPosition = Vector3.zero;
+
+	}
 
 	IEnumerator Start2()
 	{
