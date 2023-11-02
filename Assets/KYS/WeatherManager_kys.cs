@@ -5,7 +5,7 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using UnityEngine;
-using static UnityEditor.FilePathAttribute;
+using UnityEngine.UI;
 
 public class WeatherManager_kys : MonoBehaviour
 {
@@ -18,12 +18,15 @@ public class WeatherManager_kys : MonoBehaviour
 	private static bool gpsStarted = false;
 	private static LocationInfo location;
 
+    
+
+    public Text log;
 
 
 	void Start()
     {
         StartCoroutine(IGPS_Detect());
-        GetWeather();
+        //GetWeather();
 	}
 
     void Update()
@@ -32,11 +35,8 @@ public class WeatherManager_kys : MonoBehaviour
     }
 
 
-    public void GetWeather()
+    public void GetWeather(double nx, double ny)
     {
-		WgsToBaseStationCoord pos_encoder = new WgsToBaseStationCoord();
-        //pos_encoder.dfs_xy_conv()
-
 		HttpClient client = new HttpClient();
         string url = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst"; // URL
         url += "?ServiceKey=" + "0kf1KQ3urov%2FXPmHtfhp3hqbmo85Xl7oUlu3njLQF%2Bp%2BAmixPIRc4TadB7ixtDkMplrwmzpy1oKR6d6cxkfKSA%3D%3D"; // Service Key
@@ -59,6 +59,7 @@ public class WeatherManager_kys : MonoBehaviour
             results = reader.ReadToEnd();
         }
 
+        
         Debug.Log(results);
     }
 
@@ -67,6 +68,7 @@ public class WeatherManager_kys : MonoBehaviour
 		// 유저가 GPS 사용중인지 최초 체크//
 		if (!Input.location.isEnabledByUser)
 		{
+            log.text = "GPS is not enabled";
 			Debug.Log("GPS is not enabled");
 			yield break;
 		}
@@ -93,6 +95,7 @@ public class WeatherManager_kys : MonoBehaviour
 		//연결 실패
 		if (Input.location.status == LocationServiceStatus.Failed)
 		{
+			log.text = "Unable to determine device location";
 			Debug.Log("Unable to determine device location");
 			yield break;
 		}
@@ -110,6 +113,14 @@ public class WeatherManager_kys : MonoBehaviour
 				location = Input.location.lastData;
 				current_Lat = location.latitude * 1.0d;
 				current_Long = location.longitude * 1.0d;
+
+                //위도경도를 API규격으로 변환
+				WgsToBaseStationCoord pos_encoder = new WgsToBaseStationCoord();
+				LatXLonY encoded_pos = pos_encoder.dfs_xy_conv(current_Lat, current_Long);
+				log.text = " API 규격 좌표 : " + encoded_pos.x + " , " + encoded_pos.y ;
+				Debug.Log( " API 규격 좌표 : " + encoded_pos.x + " , " + encoded_pos.y);
+                GetWeather(encoded_pos.x, encoded_pos.y);
+
 				yield return new WaitForSeconds(1f);
 			}
 		}
