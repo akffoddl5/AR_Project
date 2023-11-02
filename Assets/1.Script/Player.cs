@@ -5,9 +5,6 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] GameObject cameraOffset;
-    [SerializeField] TextMeshProUGUI posText;
-    [SerializeField] GameObject enemy;
 
     // Start is called before the first frame update
     void Start()
