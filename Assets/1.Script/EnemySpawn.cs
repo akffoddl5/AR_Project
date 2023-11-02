@@ -21,7 +21,8 @@ public class EnemySpawn : MonoBehaviour
     void Start()
     {
         
-        StartCoroutine(Spawn());
+        //StartCoroutine(Spawn());
+        //
     }
 
     // Update is called once per frame
