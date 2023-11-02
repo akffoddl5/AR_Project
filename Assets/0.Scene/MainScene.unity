@@ -1098,7 +1098,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5279811245224066694}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e432562fbdb31e747ab6f585db130e81, type: 3}
   m_Name: 
@@ -2350,6 +2350,7 @@ GameObject:
   - component: {fileID: 6795331778272559759}
   - component: {fileID: 6147876874761778381}
   - component: {fileID: 1136503120}
+  - component: {fileID: 6795331778272559760}
   - component: {fileID: 1136503121}
   m_Layer: 3
   m_Name: Pudu
@@ -2686,6 +2687,25 @@ LODGroup:
     renderers:
     - renderer: {fileID: 554706828954562635}
   m_Enabled: 1
+--- !u!114 &6795331778272559760
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5279811245224066694}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c60d6b7b41c5e042b61b261e4d28b7f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  anim: {fileID: 6147876874761778381}
+  targetPos: {fileID: 1509632495}
+  lookPos: {fileID: 832304132}
+  moveSpeed: 1.5
+  rotSpeed: 80
+  moveCount: 0.5
+  moveDistance: 0.4
 --- !u!4 &7122754119038979267
 Transform:
   m_ObjectHideFlags: 0

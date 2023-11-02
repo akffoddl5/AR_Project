@@ -28,7 +28,67 @@ public class Animal : MonoBehaviour
         if (!updatePlay)
             return;
 
-        TargetMove();
+        if (Vector3.Distance(transform.position, targetPos.position) > moveDistance)
+        {
+            TargetMove();
+        }
+        else if (Input.touchCount > 0)
+        {
+            TouchAnimal();
+        }
+        else
+        {
+            LookAtCamera();
+        }
+    }
+
+    private void LookAtCamera()
+    {
+        timeCount = 0;
+
+        anim.Play("Idle_A");
+
+        Vector3 dir = lookPos.position - transform.position;
+        Quaternion rot = Quaternion.LookRotation(dir);
+
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, rot, rotSpeed * Time.deltaTime);
+    }
+
+    private static void TouchAnimal()
+    {
+        Touch touch = Input.GetTouch(0);
+
+        //첫번쨰 터치가 입력이 움직이는 중이라면
+        if (touch.phase == TouchPhase.Moved)
+        {
+            Vector2 touchDelta = touch.deltaPosition;
+            Vector2 screen_pos = touch.position;
+
+
+            RaycastHit _hit;
+            var a = Camera.main.ScreenPointToRay(screen_pos);
+            var b = Physics.Raycast(a, out _hit, LayerMask.GetMask("Player"));
+
+            if (b)
+            {
+                if (touchDelta.x > 0)
+                {
+                    _hit.transform.gameObject.GetComponent<Animator>().Play("Spin");
+                }
+                else
+                {
+                    _hit.transform.gameObject.GetComponent<Animator>().Play("Spin_R");
+
+                }
+
+
+            }
+            else
+            {
+                //Debug.Log("못찾음");
+            }
+
+        }
     }
 
     IEnumerator AnimalStart()
@@ -60,33 +120,18 @@ public class Animal : MonoBehaviour
 
     void TargetMove()
     {
-        if (Vector3.Distance(transform.position, targetPos.position) > moveDistance)
+        timeCount += Time.deltaTime;
+
+        if (timeCount >= moveCount)
         {
-            timeCount += Time.deltaTime;
+            anim.Play("Walk");
 
-            if (timeCount >= moveCount)
-            {
-                anim.Play("Walk");
-
-                Vector3 dir = targetPos.position - transform.position;
-                Quaternion rot = Quaternion.LookRotation(dir);
-
-                transform.rotation = rot;
-
-                transform.position = Vector3.MoveTowards(transform.position, targetPos.position, moveSpeed * Time.deltaTime);
-            }
-
-        }
-        else
-        {
-            timeCount = 0;
-
-            anim.Play("Idle_A");
-
-            Vector3 dir = lookPos.position - transform.position;
+            Vector3 dir = targetPos.position - transform.position;
             Quaternion rot = Quaternion.LookRotation(dir);
 
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, rot, rotSpeed * Time.deltaTime);
+            transform.rotation = rot;
+
+            transform.position = Vector3.MoveTowards(transform.position, targetPos.position, moveSpeed * Time.deltaTime);
         }
 
     }
