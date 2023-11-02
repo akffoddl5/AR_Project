@@ -14,6 +14,8 @@ public class ObjectController : MonoBehaviour
         {
             Touch touch = Input.GetTouch(0);
 
+            
+
             //첫번쨰 터치가 입력이 움직이는 중이라면
             if (touch.phase == TouchPhase.Moved)
             {
