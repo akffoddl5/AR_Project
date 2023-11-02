@@ -1,15 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 
 public class Animal : MonoBehaviour
 {
     [SerializeField] Animator anim;
     [SerializeField] Transform targetPos;
+    [SerializeField] Transform lookPos;
     [SerializeField] float moveSpeed = 10f;
     [SerializeField] float rotSpeed = 5f;
+    [SerializeField] float moveCount = 0.5f;
+    [SerializeField] float moveDistance = 0.2f;
     bool animationEnd = false;
     bool updatePlay = false;
+    float timeCount = 0f;
 
     // Start is called before the first frame update
     void Start()
@@ -23,7 +28,7 @@ public class Animal : MonoBehaviour
         if (!updatePlay)
             return;
 
-        
+        TargetMove();
     }
 
     IEnumerator AnimalStart()
@@ -42,7 +47,7 @@ public class Animal : MonoBehaviour
 
         yield return new WaitForSeconds(2f);
 
-        yield return TargetMove();
+        //yield return TargetMove();
 
         updatePlay = true;
     }
@@ -53,40 +58,61 @@ public class Animal : MonoBehaviour
         animationEnd = true;
     }
 
-    private void OnBecameInvisible()
+    void TargetMove()
     {
-        updatePlay = false;
-
-
-    }
-
-    IEnumerator TargetMove()
-    {
-        anim.Play("Walk");
-
-        while (Vector3.Distance(transform.position, targetPos.position) > 0.1f)
+        if (Vector3.Distance(transform.position, targetPos.position) > moveDistance)
         {
-            transform.position = Vector3.MoveTowards(transform.position, targetPos.position, moveSpeed * Time.deltaTime);
+            timeCount += Time.deltaTime;
 
-            yield return null;
+            if (timeCount >= moveCount)
+            {
+                anim.Play("Walk");
+
+                transform.position = Vector3.MoveTowards(transform.position, targetPos.position, moveSpeed * Time.deltaTime);
+            }
+
         }
-
-        //transform.LookAt(Camera.main.transform);
-
-        anim.speed = 0.5f;
-
-        Vector3 dir = Camera.main.transform.position - transform.position;
-        Quaternion rot = Quaternion.LookRotation(dir);
-
-        while (transform.rotation != rot)
+        else
         {
+            timeCount = 0;
+
+            anim.Play("Idle_A");
+
+            Vector3 dir = lookPos.position - transform.position;
+            Quaternion rot = Quaternion.LookRotation(dir);
+
             transform.rotation = Quaternion.RotateTowards(transform.rotation, rot, rotSpeed * Time.deltaTime);
-
-            yield return null;
         }
 
-        anim.speed = 1f;
-
-        anim.Play("Idle_A");
     }
+
+    //IEnumerator TargetMove()
+    //{
+    //    anim.Play("Walk");
+
+    //    while (Vector3.Distance(transform.position, targetPos.position) > 0.1f)
+    //    {
+    //        transform.position = Vector3.MoveTowards(transform.position, targetPos.position, moveSpeed * Time.deltaTime);
+
+    //        yield return null;
+    //    }
+
+    //    //transform.LookAt(Camera.main.transform);
+
+    //    anim.speed = 0.5f;
+
+    //    Vector3 dir = Camera.main.transform.position - transform.position;
+    //    Quaternion rot = Quaternion.LookRotation(dir);
+
+    //    while (transform.rotation != rot)
+    //    {
+    //        transform.rotation = Quaternion.RotateTowards(transform.rotation, rot, rotSpeed * Time.deltaTime);
+
+    //        yield return null;
+    //    }
+
+    //    anim.speed = 1f;
+
+    //    anim.Play("Idle_A");
+    //}
 }
