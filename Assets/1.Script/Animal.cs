@@ -68,6 +68,11 @@ public class Animal : MonoBehaviour
             {
                 anim.Play("Walk");
 
+                Vector3 dir = targetPos.position - transform.position;
+                Quaternion rot = Quaternion.LookRotation(dir);
+
+                transform.rotation = rot;
+
                 transform.position = Vector3.MoveTowards(transform.position, targetPos.position, moveSpeed * Time.deltaTime);
             }
 
