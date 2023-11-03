@@ -16,6 +16,8 @@ public class Animal : MonoBehaviour
     bool updatePlay = false;
     float timeCount = 0f;
 
+    [SerializeField] GameObject loveAura;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -54,7 +56,7 @@ public class Animal : MonoBehaviour
         transform.rotation = Quaternion.RotateTowards(transform.rotation, rot, rotSpeed * Time.deltaTime);
     }
 
-    private static void TouchAnimal()
+    private void TouchAnimal()
     {
         Touch touch = Input.GetTouch(0);
 
@@ -81,13 +83,17 @@ public class Animal : MonoBehaviour
 
                 }
 
-
+                loveAura.SetActive(true);
             }
             else
             {
                 //Debug.Log("¸øÃ£À½");
             }
 
+        }
+        else
+        {
+            loveAura.SetActive(false);
         }
     }
 

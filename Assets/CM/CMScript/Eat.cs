@@ -19,6 +19,7 @@ public class Eat : MonoBehaviour
     DateTime nowTime2;
 
     [SerializeField] Image timePanel;
+    [SerializeField] GameObject loveHit;
 
     void Start()
     {
@@ -71,7 +72,9 @@ public class Eat : MonoBehaviour
     }
     public void EatEatEat()
     {
+        loveHit.SetActive(false);
         satiety = maxsatiety;
+        loveHit.SetActive(true);
     }
 
     private void Update()
