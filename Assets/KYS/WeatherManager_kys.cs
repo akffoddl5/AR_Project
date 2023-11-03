@@ -1,3 +1,4 @@
+using DigitalRuby.RainMaker;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,9 +10,9 @@ using UnityEngine.UI;
 
 public enum WEATHER
 {
-	SUNNY,
-	RAINNY,
-	SNOWY,
+    SUNNY,
+    RAINNY,
+    SNOWY,
 }
 
 
@@ -19,124 +20,187 @@ public enum WEATHER
 
 public class WeatherManager_kys : MonoBehaviour
 {
-	public static WeatherManager_kys instance;
+    public static WeatherManager_kys instance;
 
-	public static double first_Lat; //최초 위도
-	public static double first_Long; //최초 경도
-	public static double current_Lat; //현재 위도
-	public static double current_Long; //현재 경도
+    public static double first_Lat; //최초 위도
+    public static double first_Long; //최초 경도
+    public static double current_Lat; //현재 위도
+    public static double current_Long; //현재 경도
 
 
-	private static bool gpsStarted = false;
-	private static LocationInfo location;
+    private static bool gpsStarted = false;
+    private static LocationInfo location;
     public Text log;
 
 
-	public WEATHER weather_type = WEATHER.SUNNY;
-	public string temperature;
-	public string wind_force;
+    public WEATHER weather_type = WEATHER.SUNNY;
+    public string temperature;
+    public string wind_force;
 
-	private void Awake()
-	{
-		if (instance == null)
-		{
-			instance = this;
-			DontDestroyOnLoad(this);
-		}
-		else
-		{
-			Destroy(gameObject);
-		}
-	}
+    public WEATHER weather_type_test = WEATHER.SUNNY;
+    public float temperature_test = 0;
+    public float wind_force_test = 0;
 
+    [SerializeField] GameObject rain;
+    [SerializeField] GameObject snow;
 
-	void Start()
+    private void Awake()
     {
-
-		Debug.Log(DateTime.Now.ToString(("yyyy")) + " " + DateTime.Now.ToString(("MM")) + " " + DateTime.Now.ToString(("dd")));
-		Debug.Log(DateTime.Now.ToString(("HH")) + " " + DateTime.Now.ToString(("mm")) + " " + DateTime.Now.ToString(("ss")));
-		Debug.Log(DateTime.Now.ToString(("yyyyMMdd")));
-		Debug.Log(DateTime.Now.ToString(("HHmm")));//
-
-		StartCoroutine(IGPS_Detect());
-		//GetWeather();
-		//log.text = DateTime.Now.ToString(("yyyy")) + " " + DateTime.Now.ToString(("MM")) + " " + DateTime.Now.ToString(("dd"));
-		//log.text += DateTime.Now.ToString(("HH")) + " " + DateTime.Now.ToString(("mm")) + " " + DateTime.Now.ToString(("ss"));
-
-		//Debug.Log(DateTime.Now.ToString(("yyyy")) + " " + DateTime.Now.ToString(("MM")) + " " + DateTime.Now.ToString(("dd")));
-		//Debug.Log(DateTime.Now.ToString(("HH")) + " " + DateTime.Now.ToString(("mm")) + " " + DateTime.Now.ToString(("ss")));
-		
-		HttpClient client = new HttpClient();
-		string url = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst"; // URL
-		url += "?ServiceKey=" + "0kf1KQ3urov%2FXPmHtfhp3hqbmo85Xl7oUlu3njLQF%2Bp%2BAmixPIRc4TadB7ixtDkMplrwmzpy1oKR6d6cxkfKSA%3D%3D"; // Service Key
-		url += "&pageNo=1";
-		url += "&numOfRows=1000";
-		url += "&dataType=JSON";
-		url += "&base_date=20231102";//
-		url += "&base_time=0600";
-		url += "&nx=61"  ;
-		url += "&ny=126" ;
-
-		var request = (HttpWebRequest)WebRequest.Create(url);
-		request.Method = "GET";
-
-		string results = string.Empty;
-		HttpWebResponse response;
-		using (response = request.GetResponse() as HttpWebResponse)
-		{
-			StreamReader reader = new StreamReader(response.GetResponseStream());
-			results = reader.ReadToEnd();
-		}
-
-		//var a = JsonUtility.FromJson<JsonWeather>(results);
-
-		Debug.Log(results);
-
-		WeatherData weatherData = JsonUtility.FromJson<WeatherData>(results);
-
-		foreach (var item in weatherData.response.body.items.item)
-		{
-			//Debug.Log("BaseDate: " + item.baseDate);
-			//Debug.Log("BaseTime: " + item.baseTime);
-			//Debug.Log("Category: " + item.category);
-			//Debug.Log("Nx: " + item.nx);
-			//Debug.Log("Ny: " + item.ny);
-			//Debug.Log("ObsrValue: " + item.obsrValue);
-			//Debug.Log();
-		}
-
-
-
-
-
-
-		/////
-
-
-
-	}
-
-    void Update()
-    {
-        
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(this);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
-    
 
-    public IEnumerator GetWeather(double nx, double ny)
+    void Start()
     {
-		//log.text = DateTime.Now.ToString(("yyyy")) + " " + DateTime.Now.ToString(("MM")) + " " + DateTime.Now.ToString(("dd"));
-		//log.text += DateTime.Now.ToString(("HH")) + " " + DateTime.Now.ToString(("mm")) + " " + DateTime.Now.ToString(("ss"));
 
-		
-        //log.text += nx + "  , " + ny;
-		HttpClient client = new HttpClient();
+        Debug.Log(DateTime.Now.ToString(("yyyy")) + " " + DateTime.Now.ToString(("MM")) + " " + DateTime.Now.ToString(("dd")));
+        Debug.Log(DateTime.Now.ToString(("HH")) + " " + DateTime.Now.ToString(("mm")) + " " + DateTime.Now.ToString(("ss")));
+        Debug.Log(DateTime.Now.ToString(("yyyyMMdd")));
+        Debug.Log(DateTime.Now.ToString(("HHmm")));//
+
+        StartCoroutine(IGPS_Detect());
+        //GetWeather();
+        //log.text = DateTime.Now.ToString(("yyyy")) + " " + DateTime.Now.ToString(("MM")) + " " + DateTime.Now.ToString(("dd"));
+        //log.text += DateTime.Now.ToString(("HH")) + " " + DateTime.Now.ToString(("mm")) + " " + DateTime.Now.ToString(("ss"));
+
+        //Debug.Log(DateTime.Now.ToString(("yyyy")) + " " + DateTime.Now.ToString(("MM")) + " " + DateTime.Now.ToString(("dd")));
+        //Debug.Log(DateTime.Now.ToString(("HH")) + " " + DateTime.Now.ToString(("mm")) + " " + DateTime.Now.ToString(("ss")));
+
+        HttpClient client = new HttpClient();
         string url = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst"; // URL
         url += "?ServiceKey=" + "0kf1KQ3urov%2FXPmHtfhp3hqbmo85Xl7oUlu3njLQF%2Bp%2BAmixPIRc4TadB7ixtDkMplrwmzpy1oKR6d6cxkfKSA%3D%3D"; // Service Key
         url += "&pageNo=1";
         url += "&numOfRows=1000";
         url += "&dataType=JSON";
-        url += "&base_date=" + DateTime.Now.ToString(("yyyyMMdd")) ;//
+        url += "&base_date=20231102";//
+        url += "&base_time=0600";
+        url += "&nx=61";
+        url += "&ny=126";
+
+        var request = (HttpWebRequest)WebRequest.Create(url);
+        request.Method = "GET";
+
+        string results = string.Empty;
+        HttpWebResponse response;
+        using (response = request.GetResponse() as HttpWebResponse)
+        {
+            StreamReader reader = new StreamReader(response.GetResponseStream());
+            results = reader.ReadToEnd();
+        }
+
+        //var a = JsonUtility.FromJson<JsonWeather>(results);
+
+        Debug.Log(results);
+
+        WeatherData weatherData = JsonUtility.FromJson<WeatherData>(results);
+
+        foreach (var item in weatherData.response.body.items.item)
+        {
+            //Debug.Log("BaseDate: " + item.baseDate);
+            //Debug.Log("BaseTime: " + item.baseTime);
+            //Debug.Log("Category: " + item.category);
+            //Debug.Log("Nx: " + item.nx);
+            //Debug.Log("Ny: " + item.ny);
+            //Debug.Log("ObsrValue: " + item.obsrValue);
+            //Debug.Log();
+        }
+
+
+
+
+
+
+        /////
+
+
+
+    }
+
+    void Update()
+    {
+        //if (weather_type == WEATHER.RAINNY)
+        //{
+        //    rain.SetActive(true);
+        //    snow.SetActive(false);
+        //}
+        //else if (weather_type == WEATHER.SNOWY || (weather_type == WEATHER.SUNNY && float.Parse(temperature) <= 0))
+        //{
+        //    rain.SetActive(false);
+        //    snow.SetActive(true);
+        //}
+        //else
+        //{
+        //    rain.SetActive(false);
+        //    snow.SetActive(false);
+        //}
+
+        if (weather_type_test == WEATHER.RAINNY)
+        {
+            rain.GetComponent<RainScript>().RainIntensity = 1f;
+
+            snow.SetActive(false);
+        }
+        else if (weather_type_test == WEATHER.SNOWY || (weather_type_test == WEATHER.SUNNY && temperature_test <= 0))
+        {
+            rain.GetComponent<RainScript>().RainIntensity = 0f;
+            snow.SetActive(true);
+        }
+        else
+        {
+            rain.GetComponent<RainScript>().RainIntensity = 0f;
+            snow.SetActive(false);
+        }
+    }
+
+    public void Weather_type_test_Change()
+    {
+        if(weather_type_test == WEATHER.SUNNY)
+        {
+            weather_type_test = WEATHER.RAINNY;
+        }
+        else if(weather_type_test == WEATHER.RAINNY)
+        {
+            weather_type_test = WEATHER.SNOWY;
+        }
+        else
+        {
+            weather_type_test = WEATHER.SUNNY;
+        }
+    }
+
+    public void Temperature_test_Change()
+    {
+        temperature_test += 10;
+
+        if (temperature_test >= 50)
+        {
+            temperature_test = -20;
+        }
+    }
+
+
+    public IEnumerator GetWeather(double nx, double ny)
+    {
+        //log.text = DateTime.Now.ToString(("yyyy")) + " " + DateTime.Now.ToString(("MM")) + " " + DateTime.Now.ToString(("dd"));
+        //log.text += DateTime.Now.ToString(("HH")) + " " + DateTime.Now.ToString(("mm")) + " " + DateTime.Now.ToString(("ss"));
+
+
+        //log.text += nx + "  , " + ny;
+        HttpClient client = new HttpClient();
+        string url = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst"; // URL
+        url += "?ServiceKey=" + "0kf1KQ3urov%2FXPmHtfhp3hqbmo85Xl7oUlu3njLQF%2Bp%2BAmixPIRc4TadB7ixtDkMplrwmzpy1oKR6d6cxkfKSA%3D%3D"; // Service Key
+        url += "&pageNo=1";
+        url += "&numOfRows=1000";
+        url += "&dataType=JSON";
+        url += "&base_date=" + DateTime.Now.ToString(("yyyyMMdd"));//
         url += "&base_time="/* +DateTime.Now.ToString(("HHmm"))*/ + "0000";
         url += "&nx=" + nx;
         url += "&ny=" + ny;
@@ -153,123 +217,125 @@ public class WeatherManager_kys : MonoBehaviour
         }
 
         //log.text += results;
-		WeatherData weatherData = JsonUtility.FromJson<WeatherData>(results);
+        WeatherData weatherData = JsonUtility.FromJson<WeatherData>(results);
 
-		foreach (var item in weatherData.response.body.items.item)
-		{
-			//날씨정보
-			if (item.category == "PTY")
-			{
-				if (item.obsrValue == "0")
-				{
-					weather_type = WEATHER.SUNNY;
-				}
-				else if (item.obsrValue == "1" || item.obsrValue == "5" || item.obsrValue == "6")
-				{
-					weather_type = WEATHER.RAINNY;
-				} else if (item.obsrValue == "2" || item.obsrValue == "3" || item.obsrValue == "7") {
-					
-					weather_type = WEATHER.SNOWY;
-				}
-			}
+        foreach (var item in weatherData.response.body.items.item)
+        {
+            //날씨정보
+            if (item.category == "PTY")
+            {
+                if (item.obsrValue == "0")
+                {
+                    weather_type = WEATHER.SUNNY;
+                }
+                else if (item.obsrValue == "1" || item.obsrValue == "5" || item.obsrValue == "6")
+                {
+                    weather_type = WEATHER.RAINNY;
+                }
+                else if (item.obsrValue == "2" || item.obsrValue == "3" || item.obsrValue == "7")
+                {
 
-			//기온 정보
-			if (item.category == "T1H")
-			{
-				temperature = item.obsrValue;
-			}
+                    weather_type = WEATHER.SNOWY;
+                }
+            }
 
-			//풍속 정보
-			if (item.category == "WSD")
-			{
-				wind_force = item.obsrValue;
-			}
-			//Debug.Log("BaseDate: " + item.baseDate);
-			//Debug.Log("BaseTime: " + item.baseTime);
-			//Debug.Log("Category: " + item.category);
-			//Debug.Log("Nx: " + item.nx);
-			//Debug.Log("Ny: " + item.ny);
-			//Debug.Log("ObsrValue: " + item.obsrValue);
-			//Debug.Log();
+            //기온 정보
+            if (item.category == "T1H")
+            {
+                temperature = item.obsrValue;
+            }
 
-			log.text = "온도 : " + temperature + " 풍속 : " + wind_force + "  날씨 : " + weather_type; 
-		}
+            //풍속 정보
+            if (item.category == "WSD")
+            {
+                wind_force = item.obsrValue;
+            }
+            //Debug.Log("BaseDate: " + item.baseDate);
+            //Debug.Log("BaseTime: " + item.baseTime);
+            //Debug.Log("Category: " + item.category);
+            //Debug.Log("Nx: " + item.nx);
+            //Debug.Log("Ny: " + item.ny);
+            //Debug.Log("ObsrValue: " + item.obsrValue);
+            //Debug.Log();
 
-		yield return null;
+            log.text = "온도 : " + temperature + " 풍속 : " + wind_force + "  날씨 : " + weather_type;
+        }
+
+        yield return null;
     }
 
-	IEnumerator IGPS_Detect()
-	{
-		// 유저가 GPS 사용중인지 최초 체크//
-		if (!Input.location.isEnabledByUser)
-		{
+    IEnumerator IGPS_Detect()
+    {
+        // 유저가 GPS 사용중인지 최초 체크//
+        if (!Input.location.isEnabledByUser)
+        {
             log.text = "GPS is not enabled";
-			Debug.Log("GPS is not enabled");
-			yield break;
-		}
+            Debug.Log("GPS is not enabled");
+            yield break;
+        }
 
-		//GPS 서비스 시작
-		Input.location.Start();
-		Debug.Log("Awaiting initialization");
+        //GPS 서비스 시작
+        Input.location.Start();
+        Debug.Log("Awaiting initialization");
 
-		//활성화될 때 까지 대기
-		int maxWait = 20;
-		while (Input.location.status == LocationServiceStatus.Initializing && maxWait > 0)
-		{
-			yield return new WaitForSeconds(1f);
-			maxWait -= 1;
-		}
+        //활성화될 때 까지 대기
+        int maxWait = 20;
+        while (Input.location.status == LocationServiceStatus.Initializing && maxWait > 0)
+        {
+            yield return new WaitForSeconds(1f);
+            maxWait -= 1;
+        }
 
-		//20초 지날경우 활성화 중단
-		if (maxWait < 1)
-		{
-			Debug.Log("Timed out");
-			yield break;
-		}
+        //20초 지날경우 활성화 중단
+        if (maxWait < 1)
+        {
+            Debug.Log("Timed out");
+            yield break;
+        }
 
-		//연결 실패
-		if (Input.location.status == LocationServiceStatus.Failed)
-		{
-			log.text = "Unable to determine device location";
-			Debug.Log("Unable to determine device location");
-			yield break;
-		}
-		else
-		{
-			//접근 허가됨, 최초 위치 정보 받아오기
-			location = Input.location.lastData;
-			first_Lat = location.latitude * 1.0d;
-			first_Long = location.longitude * 1.0d;
-			gpsStarted = true;
+        //연결 실패
+        if (Input.location.status == LocationServiceStatus.Failed)
+        {
+            log.text = "Unable to determine device location";
+            Debug.Log("Unable to determine device location");
+            yield break;
+        }
+        else
+        {
+            //접근 허가됨, 최초 위치 정보 받아오기
+            location = Input.location.lastData;
+            first_Lat = location.latitude * 1.0d;
+            first_Long = location.longitude * 1.0d;
+            gpsStarted = true;
 
-			//현재 위치 갱신
-			while (gpsStarted)
-			{
-				location = Input.location.lastData;
-				current_Lat = location.latitude * 1.0d;
-				current_Long = location.longitude * 1.0d;
+            //현재 위치 갱신
+            while (gpsStarted)
+            {
+                location = Input.location.lastData;
+                current_Lat = location.latitude * 1.0d;
+                current_Long = location.longitude * 1.0d;
 
                 //위도경도를 API규격으로 변환
-				WgsToBaseStationCoord pos_encoder = new WgsToBaseStationCoord();
-				LatXLonY encoded_pos = pos_encoder.dfs_xy_conv(current_Lat, current_Long);
-				//log.text = " API 규격 좌표 : " + encoded_pos.x + " , " + encoded_pos.y ;
-				//Debug.Log( " API 규격 좌표 : " + encoded_pos.x + " , " + encoded_pos.y);
+                WgsToBaseStationCoord pos_encoder = new WgsToBaseStationCoord();
+                LatXLonY encoded_pos = pos_encoder.dfs_xy_conv(current_Lat, current_Long);
+                //log.text = " API 규격 좌표 : " + encoded_pos.x + " , " + encoded_pos.y ;
+                //Debug.Log( " API 규격 좌표 : " + encoded_pos.x + " , " + encoded_pos.y);
                 StartCoroutine(GetWeather(encoded_pos.x, encoded_pos.y));
 
-				yield return new WaitForSeconds(10f);
-			}
-		}
-	}
+                yield return new WaitForSeconds(10f);
+            }
+        }
+    }
 
-	//위치 서비스 종료
-	public static void StopGPS()
-	{
-		if (Input.location.isEnabledByUser)
-		{
-			gpsStarted = false;
-			Input.location.Stop();
-		}
-	}
+    //위치 서비스 종료
+    public static void StopGPS()
+    {
+        if (Input.location.isEnabledByUser)
+        {
+            gpsStarted = false;
+            Input.location.Stop();
+        }
+    }
 }
 
 
@@ -347,47 +413,47 @@ public class LatXLonY
 [Serializable]
 public class Item_data
 {
-	public string baseDate ;
-	public string baseTime ;
-	public string category ;
-	public int nx;
-	public int ny;
-	public string obsrValue;
+    public string baseDate;
+    public string baseTime;
+    public string category;
+    public int nx;
+    public int ny;
+    public string obsrValue;
 }
 
 [Serializable]
 public class Item
 {
-	public List<Item_data> item;
-	
+    public List<Item_data> item;
+
 }
 [Serializable]
 public class Body
 {
-	public string dataType;
-	public Item items;
-	//public List<Item_data> items { get; set; }
-	public int pageNo;
-	public int numOfRows;
-	public int totalCount;
+    public string dataType;
+    public Item items;
+    //public List<Item_data> items { get; set; }
+    public int pageNo;
+    public int numOfRows;
+    public int totalCount;
 }
 [Serializable]
 public class Header
 {
-	public string resultCode;
-	public string resultMsg;
+    public string resultCode;
+    public string resultMsg;
 }
 
 [Serializable]
 public class Response
 {
-	public Header header;
-	public Body body;
+    public Header header;
+    public Body body;
 }
 
 [Serializable]
 public class WeatherData
 {
-	public Response response;
+    public Response response;
 }
 

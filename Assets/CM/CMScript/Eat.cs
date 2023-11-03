@@ -16,7 +16,9 @@ public class Eat : MonoBehaviour
     int timeYear;
 
     DateTime nowTime;
+    DateTime nowTime2;
 
+    [SerializeField] Image timePanel;
 
     void Start()
     {
@@ -55,9 +57,9 @@ public class Eat : MonoBehaviour
             satiety -= 60f * (float)timeCal.Hours;
             Minus += 60f * (float)timeCal.Hours;
         }
-        if (timeCal.Minutes >=1f )
+        if (timeCal.Minutes >= 1f)
         {
-            satiety -= 1f * (float)timeCal.Minutes/1f;
+            satiety -= 1f * (float)timeCal.Minutes / 1f;
             Minus += 1f * (float)timeCal.Minutes / 1f;
         }
         if (satiety < 0f)
@@ -72,7 +74,23 @@ public class Eat : MonoBehaviour
         satiety = maxsatiety;
     }
 
+    private void Update()
+    {
+        nowTime2 = DateTime.Now;
 
+        if (nowTime2.Hour < 6)
+        {
+            timePanel.color = new Color(timePanel.color.r, timePanel.color.g, timePanel.color.b, 200f / 255f);
+        }
+        else if (nowTime2.Hour < 18)
+        {
+            timePanel.color = new Color(timePanel.color.r, timePanel.color.g, timePanel.color.b, 0);
+        }
+        else
+        {
+            timePanel.color = new Color(timePanel.color.r, timePanel.color.g, timePanel.color.b, 150f / 255f);
+        }
+    }
 
     private void FixedUpdate()
     {
