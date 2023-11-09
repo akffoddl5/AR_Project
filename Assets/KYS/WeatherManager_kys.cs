@@ -126,38 +126,39 @@ public class WeatherManager_kys : MonoBehaviour
 
     void Update()
     {
-        //if (weather_type == WEATHER.RAINNY)
-        //{
-        //    rain.SetActive(true);
-        //    snow.SetActive(false);
-        //}
-        //else if (weather_type == WEATHER.SNOWY || (weather_type == WEATHER.SUNNY && float.Parse(temperature) <= 0))
-        //{
-        //    rain.SetActive(false);
-        //    snow.SetActive(true);
-        //}
-        //else
-        //{
-        //    rain.SetActive(false);
-        //    snow.SetActive(false);
-        //}
-
-        if (weather_type_test == WEATHER.RAINNY)
+        if (weather_type == WEATHER.RAINNY)
         {
-            rain.GetComponent<RainScript>().RainIntensity = 1f;
-
+            rain.SetActive(true);
             snow.SetActive(false);
         }
-        else if (weather_type_test == WEATHER.SNOWY || (weather_type_test == WEATHER.SUNNY && temperature_test <= 0))
+        else if (weather_type == WEATHER.SNOWY || (weather_type == WEATHER.SUNNY && float.Parse(temperature) <= 0))
         {
-            rain.GetComponent<RainScript>().RainIntensity = 0f;
+            rain.SetActive(false);
             snow.SetActive(true);
         }
         else
         {
-            rain.GetComponent<RainScript>().RainIntensity = 0f;
+            rain.SetActive(false);
             snow.SetActive(false);
         }
+
+        //테스트용
+        //if (weather_type_test == WEATHER.RAINNY)
+        //{
+        //    rain.GetComponent<RainScript>().RainIntensity = 1f;
+
+        //    snow.SetActive(false);
+        //}
+        //else if (weather_type_test == WEATHER.SNOWY || (weather_type_test == WEATHER.SUNNY && temperature_test <= 0))
+        //{
+        //    rain.GetComponent<RainScript>().RainIntensity = 0f;
+        //    snow.SetActive(true);
+        //}
+        //else
+        //{
+        //    rain.GetComponent<RainScript>().RainIntensity = 0f;
+        //    snow.SetActive(false);
+        //}
     }
 
     public void Weather_type_test_Change()

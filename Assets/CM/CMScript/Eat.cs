@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class Eat : MonoBehaviour
 {
+    Animator anim;
     [SerializeField] Slider satietyScroll;
     [SerializeField] float maxsatiety = 100f;
     [SerializeField] float satiety = 0; //포만감
@@ -21,6 +22,8 @@ public class Eat : MonoBehaviour
     [SerializeField] Image timePanel;
     [SerializeField] GameObject loveHit;
 
+    public bool isEat = false;
+
     void Start()
     {
         if (!PlayerPrefs.HasKey("satiety"))             //자체 데이터 저장 
@@ -30,6 +33,7 @@ public class Eat : MonoBehaviour
 
         satietyScroll.value = satiety / maxsatiety; // UI 배고픔으로 움직임
 
+        anim = transform.GetComponent<Animator>();
 
         if (PlayerPrefs.HasKey("timeH"))
         {
@@ -73,8 +77,15 @@ public class Eat : MonoBehaviour
     public void EatEatEat()
     {
         loveHit.SetActive(false);
+        isEat = true;
+        anim.Play("Eat");
         satiety = maxsatiety;
         loveHit.SetActive(true);
+    }
+
+    public void IsEat_False()
+    {
+        isEat = false;
     }
 
     private void Update()
