@@ -24,6 +24,8 @@ public class Eat : MonoBehaviour
 
     public bool isEat = false;
 
+    bool eatTime = false;
+
     void Start()
     {
         if (!PlayerPrefs.HasKey("satiety"))             //자체 데이터 저장 
@@ -76,11 +78,23 @@ public class Eat : MonoBehaviour
     }
     public void EatEatEat()
     {
-        loveHit.SetActive(false);
-        isEat = true;
-        anim.Play("Eat");
-        satiety = maxsatiety;
-        loveHit.SetActive(true);
+        if (!eatTime)
+        {
+            loveHit.SetActive(false);
+            isEat = true;
+            anim.Play("Eat");
+            anim.Play("Eyes_Squint", 1);
+            eatTime = true;
+            Invoke("EatTime_False", 1f);
+            satiety = maxsatiety;
+            loveHit.SetActive(true);
+        }
+        
+    }
+
+    void EatTime_False()
+    {
+        eatTime = false;
     }
 
     public void IsEat_False()
@@ -104,6 +118,18 @@ public class Eat : MonoBehaviour
         {
             timePanel.color = new Color(timePanel.color.r, timePanel.color.g, timePanel.color.b, 150f / 255f);
         }
+
+        if (!eatTime)
+        {
+            if (satiety <= 10)
+                anim.Play("Eyes_Spin", 1);
+            else if (satiety <= 30)
+                anim.Play("Eyes_Sad", 1);
+            else
+                anim.Play("Eyes_Blink", 1);
+        }
+        
+
     }
 
     private void FixedUpdate()
