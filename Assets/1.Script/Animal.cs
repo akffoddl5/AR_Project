@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Animal : MonoBehaviour
 {
@@ -18,9 +19,15 @@ public class Animal : MonoBehaviour
 
     [SerializeField] GameObject loveAura;
 
+    Eat eat;
+
+    [SerializeField] Button eatButton;
+
     // Start is called before the first frame update
     void Start()
     {
+        eat = transform.GetComponent<Eat>();
+
         StartCoroutine(AnimalStart());
     }
 
@@ -41,6 +48,7 @@ public class Animal : MonoBehaviour
         else
         {
             LookAtCamera();
+            eatButton.interactable = true;
         }
     }
 
@@ -48,7 +56,8 @@ public class Animal : MonoBehaviour
     {
         timeCount = 0;
 
-        anim.Play("Idle_A");
+        if (!eat.isEat)
+            anim.Play("Idle_A");
 
         Vector3 dir = lookPos.position - transform.position;
         Quaternion rot = Quaternion.LookRotation(dir);
@@ -115,6 +124,7 @@ public class Animal : MonoBehaviour
 
         //yield return TargetMove();
 
+        
         updatePlay = true;
     }
 
@@ -130,6 +140,8 @@ public class Animal : MonoBehaviour
 
         if (timeCount >= moveCount)
         {
+            eatButton.interactable = false;
+
             anim.Play("Walk");
 
             Vector3 dir = targetPos.position - transform.position;
