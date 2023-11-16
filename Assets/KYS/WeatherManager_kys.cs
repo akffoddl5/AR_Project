@@ -61,57 +61,57 @@ public class WeatherManager_kys : MonoBehaviour
     void Start()
     {
 
-        Debug.Log(DateTime.Now.ToString(("yyyy")) + " " + DateTime.Now.ToString(("MM")) + " " + DateTime.Now.ToString(("dd")));
-        Debug.Log(DateTime.Now.ToString(("HH")) + " " + DateTime.Now.ToString(("mm")) + " " + DateTime.Now.ToString(("ss")));
-        Debug.Log(DateTime.Now.ToString(("yyyyMMdd")));
-        Debug.Log(DateTime.Now.ToString(("HHmm")));//
-
-        StartCoroutine(IGPS_Detect());
-        //GetWeather();
-        //log.text = DateTime.Now.ToString(("yyyy")) + " " + DateTime.Now.ToString(("MM")) + " " + DateTime.Now.ToString(("dd"));
-        //log.text += DateTime.Now.ToString(("HH")) + " " + DateTime.Now.ToString(("mm")) + " " + DateTime.Now.ToString(("ss"));
-
         //Debug.Log(DateTime.Now.ToString(("yyyy")) + " " + DateTime.Now.ToString(("MM")) + " " + DateTime.Now.ToString(("dd")));
         //Debug.Log(DateTime.Now.ToString(("HH")) + " " + DateTime.Now.ToString(("mm")) + " " + DateTime.Now.ToString(("ss")));
+        //Debug.Log(DateTime.Now.ToString(("yyyyMMdd")));
+        //Debug.Log(DateTime.Now.ToString(("HHmm")));//
 
-        HttpClient client = new HttpClient();
-        string url = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst"; // URL
-        url += "?ServiceKey=" + "0kf1KQ3urov%2FXPmHtfhp3hqbmo85Xl7oUlu3njLQF%2Bp%2BAmixPIRc4TadB7ixtDkMplrwmzpy1oKR6d6cxkfKSA%3D%3D"; // Service Key
-        url += "&pageNo=1";
-        url += "&numOfRows=1000";
-        url += "&dataType=JSON";
-        url += "&base_date=20231102";//
-        url += "&base_time=0600";
-        url += "&nx=61";
-        url += "&ny=126";
+        //StartCoroutine(IGPS_Detect());
+        ////GetWeather();
+        ////log.text = DateTime.Now.ToString(("yyyy")) + " " + DateTime.Now.ToString(("MM")) + " " + DateTime.Now.ToString(("dd"));
+        ////log.text += DateTime.Now.ToString(("HH")) + " " + DateTime.Now.ToString(("mm")) + " " + DateTime.Now.ToString(("ss"));
 
-        var request = (HttpWebRequest)WebRequest.Create(url);
-        request.Method = "GET";
+        ////Debug.Log(DateTime.Now.ToString(("yyyy")) + " " + DateTime.Now.ToString(("MM")) + " " + DateTime.Now.ToString(("dd")));
+        ////Debug.Log(DateTime.Now.ToString(("HH")) + " " + DateTime.Now.ToString(("mm")) + " " + DateTime.Now.ToString(("ss")));
 
-        string results = string.Empty;
-        HttpWebResponse response;
-        using (response = request.GetResponse() as HttpWebResponse)
-        {
-            StreamReader reader = new StreamReader(response.GetResponseStream());
-            results = reader.ReadToEnd();
-        }
+        //HttpClient client = new HttpClient();
+        //string url = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst"; // URL
+        //url += "?ServiceKey=" + "0kf1KQ3urov%2FXPmHtfhp3hqbmo85Xl7oUlu3njLQF%2Bp%2BAmixPIRc4TadB7ixtDkMplrwmzpy1oKR6d6cxkfKSA%3D%3D"; // Service Key
+        //url += "&pageNo=1";
+        //url += "&numOfRows=1000";
+        //url += "&dataType=JSON";
+        //url += "&base_date=20231102";//
+        //url += "&base_time=0600";
+        //url += "&nx=61";
+        //url += "&ny=126";
 
-        //var a = JsonUtility.FromJson<JsonWeather>(results);
+        //var request = (HttpWebRequest)WebRequest.Create(url);
+        //request.Method = "GET";
 
-        Debug.Log(results);
+        //string results = string.Empty;
+        //HttpWebResponse response;
+        //using (response = request.GetResponse() as HttpWebResponse)
+        //{
+        //    StreamReader reader = new StreamReader(response.GetResponseStream());
+        //    results = reader.ReadToEnd();
+        //}
 
-        WeatherData weatherData = JsonUtility.FromJson<WeatherData>(results);
+        ////var a = JsonUtility.FromJson<JsonWeather>(results);
 
-        foreach (var item in weatherData.response.body.items.item)
-        {
-            //Debug.Log("BaseDate: " + item.baseDate);
-            //Debug.Log("BaseTime: " + item.baseTime);
-            //Debug.Log("Category: " + item.category);
-            //Debug.Log("Nx: " + item.nx);
-            //Debug.Log("Ny: " + item.ny);
-            //Debug.Log("ObsrValue: " + item.obsrValue);
-            //Debug.Log();
-        }
+        //Debug.Log(results);
+
+        //WeatherData weatherData = JsonUtility.FromJson<WeatherData>(results);
+
+        //foreach (var item in weatherData.response.body.items.item)
+        //{
+        //    //Debug.Log("BaseDate: " + item.baseDate);
+        //    //Debug.Log("BaseTime: " + item.baseTime);
+        //    //Debug.Log("Category: " + item.category);
+        //    //Debug.Log("Nx: " + item.nx);
+        //    //Debug.Log("Ny: " + item.ny);
+        //    //Debug.Log("ObsrValue: " + item.obsrValue);
+        //    //Debug.Log();
+        //}
 
 
 

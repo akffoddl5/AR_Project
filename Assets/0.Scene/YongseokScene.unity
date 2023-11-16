@@ -466,6 +466,11 @@ MonoBehaviour:
   weather_type: 0
   temperature: 
   wind_force: 
+  weather_type_test: 0
+  temperature_test: 0
+  wind_force_test: 0
+  rain: {fileID: 0}
+  snow: {fileID: 0}
 --- !u!4 &321388119
 Transform:
   m_ObjectHideFlags: 0
