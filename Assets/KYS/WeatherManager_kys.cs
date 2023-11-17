@@ -61,6 +61,15 @@ public class WeatherManager_kys : MonoBehaviour
     void Start()
     {
 
+ 
+
+        if (!Permission.HasUserAuthorizedPermission(Permission.FineLocation))
+        {
+            Permission.RequestUserPermission(Permission.FineLocation);
+        }
+
+        
+
         //Debug.Log(DateTime.Now.ToString(("yyyy")) + " " + DateTime.Now.ToString(("MM")) + " " + DateTime.Now.ToString(("dd")));
         //Debug.Log(DateTime.Now.ToString(("HH")) + " " + DateTime.Now.ToString(("mm")) + " " + DateTime.Now.ToString(("ss")));
         //Debug.Log(DateTime.Now.ToString(("yyyyMMdd")));
