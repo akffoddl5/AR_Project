@@ -6,6 +6,7 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using UnityEngine;
+using UnityEngine.Android;
 using UnityEngine.UI;
 
 public enum WEATHER
@@ -60,6 +61,14 @@ public class WeatherManager_kys : MonoBehaviour
 
     void Start()
     {
+#if PLATFORM_ANDROID
+        if (!Permission.HasUserAuthorizedPermission(Permission.FineLocation))
+        {
+            Permission.RequestUserPermission(Permission.FineLocation);
+        }
+#endif
+
+
         StartCoroutine(IGPS_Detect());
         //Debug.Log(DateTime.Now.ToString(("yyyy")) + " " + DateTime.Now.ToString(("MM")) + " " + DateTime.Now.ToString(("dd")));
         //Debug.Log(DateTime.Now.ToString(("HH")) + " " + DateTime.Now.ToString(("mm")) + " " + DateTime.Now.ToString(("ss")));
