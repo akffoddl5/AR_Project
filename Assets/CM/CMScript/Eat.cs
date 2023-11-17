@@ -101,7 +101,8 @@ public class Eat : MonoBehaviour
     {
         isEat = false;
     }
-
+    [SerializeField] Image timeIcon;
+    [SerializeField] Sprite[] timeIcons; 
     private void Update()
     {
         nowTime2 = DateTime.Now;
@@ -109,14 +110,17 @@ public class Eat : MonoBehaviour
         if (nowTime2.Hour < 6)
         {
             timePanel.color = new Color(timePanel.color.r, timePanel.color.g, timePanel.color.b, 200f / 255f);
+            timeIcon.sprite = timeIcons[0];
         }
         else if (nowTime2.Hour < 18)
         {
             timePanel.color = new Color(timePanel.color.r, timePanel.color.g, timePanel.color.b, 0);
+            timeIcon.sprite = timeIcons[1];
         }
         else
         {
             timePanel.color = new Color(timePanel.color.r, timePanel.color.g, timePanel.color.b, 150f / 255f);
+            timeIcon.sprite = timeIcons[2];
         }
 
         if (!eatTime)
