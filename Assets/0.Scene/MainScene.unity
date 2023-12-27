@@ -715,7 +715,6 @@ MonoBehaviour:
   log: {fileID: 1203793690}
   weather_type: 0
   temperature: 
-  wind_force: 
   weather_type_test: 0
   temperature_test: -20
   wind_force_test: 0
@@ -1781,7 +1780,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1320888850
 RectTransform:
   m_ObjectHideFlags: 0

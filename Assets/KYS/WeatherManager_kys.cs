@@ -32,11 +32,12 @@ public class WeatherManager_kys : MonoBehaviour
     private static bool gpsStarted = false;
     private static LocationInfo location;
     public Text log;
+    //public Text Testlog;
 
 
     public WEATHER weather_type = WEATHER.SUNNY;
-    public string temperature;
-    public string wind_force;
+    public string temperature = "20";//
+    string wind_force;
 
     public WEATHER weather_type_test = WEATHER.SUNNY;
     public float temperature_test = 0;
@@ -47,6 +48,7 @@ public class WeatherManager_kys : MonoBehaviour
 
     private void Awake()
     {
+        temperature = "20";//
         if (instance == null)
         {
             instance = this;
@@ -59,17 +61,19 @@ public class WeatherManager_kys : MonoBehaviour
     }
 
 
+
     void Start()
     {
-#if PLATFORM_ANDROID
+        //Testlog.text += wind_force;
+
+
         if (!Permission.HasUserAuthorizedPermission(Permission.FineLocation))
         {
             Permission.RequestUserPermission(Permission.FineLocation);
         }
-#endif
-
 
         StartCoroutine(IGPS_Detect());
+
         //Debug.Log(DateTime.Now.ToString(("yyyy")) + " " + DateTime.Now.ToString(("MM")) + " " + DateTime.Now.ToString(("dd")));
         //Debug.Log(DateTime.Now.ToString(("HH")) + " " + DateTime.Now.ToString(("mm")) + " " + DateTime.Now.ToString(("ss")));
         //Debug.Log(DateTime.Now.ToString(("yyyyMMdd")));
@@ -135,11 +139,12 @@ public class WeatherManager_kys : MonoBehaviour
 
     void Update()
     {
+
         if (weather_type == WEATHER.RAINNY)
         {
             rain.SetActive(true);
             snow.SetActive(false);
-        }
+        }//
         else if (weather_type == WEATHER.SNOWY || (weather_type == WEATHER.SUNNY && float.Parse(temperature) <= 0))
         {
             rain.SetActive(false);
@@ -202,22 +207,25 @@ public class WeatherManager_kys : MonoBehaviour
         //log.text += DateTime.Now.ToString(("HH")) + " " + DateTime.Now.ToString(("mm")) + " " + DateTime.Now.ToString(("ss"));
 
         //현재 시간에서 한 시간 전
-        DateTime dateTime = DateTime.Now.AddHours(-1);
+        DateTime dateTime = DateTime.Now.AddHours(-2);
+
+        //Testlog.text = dateTime.ToString() + " : " + nx + "," + ny;
 
         //log.text += nx + "  , " + ny;
-        HttpClient client = new HttpClient();
+        //HttpClient client = new HttpClient();
         string url = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst"; // URL
         url += "?ServiceKey=" + "0kf1KQ3urov%2FXPmHtfhp3hqbmo85Xl7oUlu3njLQF%2Bp%2BAmixPIRc4TadB7ixtDkMplrwmzpy1oKR6d6cxkfKSA%3D%3D"; // Service Key
         url += "&pageNo=1";
-        url += "&numOfRows=1000";
-        url += "&dataType=JSON";
+        url += "&numOfRows1000";
+        url += "&dataType=J=SON";
         url += "&base_date=" + dateTime.ToString(("yyyyMMdd"));//
-        url += "&base_time="/* +DateTime.Now.ToString(("HHmm"))*/ + dateTime.ToString("D2") + "00";
+        url += "&base_time="/* +DateTime.Now.ToString(("HHmm"))*/ + dateTime.Hour.ToString("D2") + "00";
         url += "&nx=" + nx;
         url += "&ny=" + ny;
 
         var request = (HttpWebRequest)WebRequest.Create(url);
         request.Method = "GET";
+        request.Timeout = 3000;
 
         string results = string.Empty;
         HttpWebResponse response;
@@ -275,67 +283,88 @@ public class WeatherManager_kys : MonoBehaviour
         yield return null;
     }
 
+    bool isGpsStart = false;
     IEnumerator IGPS_Detect()
     {
-        // 유저가 GPS 사용중인지 최초 체크//
-        if (!Input.location.isEnabledByUser)
+        while (true)
         {
-            log.text = "GPS is not enabled";
-            Debug.Log("GPS is not enabled");
-            yield break;
-        }
-
-        //GPS 서비스 시작
-        Input.location.Start();
-        Debug.Log("Awaiting initialization");
-
-        //활성화될 때 까지 대기
-        int maxWait = 20;
-        while (Input.location.status == LocationServiceStatus.Initializing && maxWait > 0)
-        {
-            yield return new WaitForSeconds(1f);
-            maxWait -= 1;
-        }
-
-        //20초 지날경우 활성화 중단
-        if (maxWait < 1)
-        {
-            Debug.Log("Timed out");
-            yield break;
-        }
-
-        //연결 실패
-        if (Input.location.status == LocationServiceStatus.Failed)
-        {
-            log.text = "Unable to determine device location";
-            Debug.Log("Unable to determine device location");
-            yield break;
-        }
-        else
-        {
-            //접근 허가됨, 최초 위치 정보 받아오기
-            location = Input.location.lastData;
-            first_Lat = location.latitude * 1.0d;
-            first_Long = location.longitude * 1.0d;
-            gpsStarted = true;
-
-            //현재 위치 갱신
-            while (gpsStarted)
+            // 유저가 GPS 사용중인지 최초 체크//
+            if (!Input.location.isEnabledByUser)
             {
-                location = Input.location.lastData;
-                current_Lat = location.latitude * 1.0d;
-                current_Long = location.longitude * 1.0d;
+                log.text = "GPS is not enabled";
+                //Debug.Log("GPS is not enabled");
 
-                //위도경도를 API규격으로 변환
-                WgsToBaseStationCoord pos_encoder = new WgsToBaseStationCoord();
-                LatXLonY encoded_pos = pos_encoder.dfs_xy_conv(current_Lat, current_Long);
-                //log.text = " API 규격 좌표 : " + encoded_pos.x + " , " + encoded_pos.y ;
-                //Debug.Log( " API 규격 좌표 : " + encoded_pos.x + " , " + encoded_pos.y);
-                StartCoroutine(GetWeather(encoded_pos.x, encoded_pos.y));
+                yield return new WaitForSeconds(1f);
 
-                yield return new WaitForSeconds(10f);
+                continue;
             }
+
+            //GPS 서비스 시작
+            if (!isGpsStart)
+            {
+                Input.location.Start();
+                //Debug.Log("Awaiting initialization");
+
+                isGpsStart = true;
+            }
+            //활성화될 때 까지 대기
+            int maxWait = 20;
+            while (Input.location.status == LocationServiceStatus.Initializing && maxWait > 0)
+            {
+                yield return new WaitForSeconds(1f);
+                maxWait -= 1;
+            }
+
+            //20초 지날경우 활성화 중단
+            if (maxWait < 1)
+            {
+                //Debug.Log("Timed out");
+
+                yield return new WaitForSeconds(1f);
+
+                continue;
+            }
+
+            //연결 실패
+            if (Input.location.status == LocationServiceStatus.Failed)
+            {
+                log.text = "Unable to determine device location";
+                //Debug.Log("Unable to determine device location");
+
+                yield return new WaitForSeconds(1f);
+
+                continue;
+            }
+            else
+            {
+                //접근 허가됨, 최초 위치 정보 받아오기
+                location = Input.location.lastData;
+                first_Lat = location.latitude * 1.0d;
+                first_Long = location.longitude * 1.0d;
+                gpsStarted = true;
+
+                //현재 위치 갱신
+                if (gpsStarted)
+                {
+                    location = Input.location.lastData;
+                    current_Lat = location.latitude * 1.0d;
+                    current_Long = location.longitude * 1.0d;
+
+                    //위도경도를 API규격(지역번호)으로 변환
+                    WgsToBaseStationCoord pos_encoder = new WgsToBaseStationCoord();
+                    LatXLonY encoded_pos = pos_encoder.dfs_xy_conv(current_Lat, current_Long); //지역번호 변환 함수
+                    //log.text = " API 규격 좌표 : " + encoded_pos.x + " , " + encoded_pos.y ;
+                    //Debug.Log( " API 규격 좌표 : " + encoded_pos.x + " , " + encoded_pos.y);
+                    StartCoroutine(GetWeather(encoded_pos.x, encoded_pos.y));
+
+                    yield break;
+                }
+            }
+
+            yield return new WaitForSeconds(3f);
         }
+
+
     }
 
     //위치 서비스 종료
@@ -467,4 +496,3 @@ public class WeatherData
 {
     public Response response;
 }
-
